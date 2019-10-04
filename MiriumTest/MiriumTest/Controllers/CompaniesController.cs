@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MiriumTest.Models;
 using MiriumTest.Services;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace MiriumTest.Controllers
 {
@@ -17,8 +19,20 @@ namespace MiriumTest.Controllers
 		}
 
 		[HttpGet]
-		public ActionResult<List<Company>> Get() =>
-			_companySerivce.Get();
+		public ActionResult<List<Company>> Get()
+		{
+			if (String.IsNullOrEmpty(HttpContext.Request.Query["name"]))
+			{
+				return _companySerivce.Get();
+			}
+			else
+			{
+				string name = HttpContext.Request.Query["name"].ToString();
+				var companies = _companySerivce.GetByName(name);
+
+				return companies;
+			}
+		}
 
 		[HttpGet("{id:length(24)}", Name = "GetCompany")]
 		public ActionResult<Company> Get(string id)
