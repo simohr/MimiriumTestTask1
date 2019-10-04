@@ -50,7 +50,7 @@ namespace UnitTest
 		public async Task Test_Get_Post()
 		{
 			string stringPayload = "{\"name\":\"MyCompany3\", " +
-									"\"vat\":\"3214\" " +
+									"\"vat\":\"321434\" " +
 									"}";
 			var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
 
