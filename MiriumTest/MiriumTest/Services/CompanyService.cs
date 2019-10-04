@@ -24,7 +24,7 @@ namespace MiriumTest.Services
 			_companies.Find<Company>(company => company.Id == id).FirstOrDefault();
 
 		public List<Company> GetByName(string name) =>
-			_companies.Find(company => company.Name == name).ToList();
+			_companies.Find(company => company.Name.ToLower().Contains(name.ToLower())).ToList();
 
 		public Company Create(Company company)
 		{
