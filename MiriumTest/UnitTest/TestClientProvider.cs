@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration;
 using MiriumTest;
 using System.Net.Http;
 
@@ -10,7 +11,14 @@ namespace UnitTest
 		public HttpClient Client { get; private set; }
 		public TestClientProvider()
 		{
-			var server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
+			var builder = new ConfigurationBuilder()
+				.AddJsonFile("appsettings.json");
+
+			var webBuilder = new WebHostBuilder()
+				.UseConfiguration(builder.Build())
+				.UseStartup<Startup>();
+
+			var server = new TestServer(webBuilder);
 
 			Client = server.CreateClient();
 		}
