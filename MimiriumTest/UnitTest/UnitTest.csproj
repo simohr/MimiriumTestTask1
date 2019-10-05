@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MiriumTest\MimiriumTest.csproj" />
+    <ProjectReference Include="..\MimiriumTest\MimiriumTest.csproj" />
   </ItemGroup>
 
 </Project>

@@ -29,7 +29,7 @@ namespace UnitTest
 		[Fact]
 		public async Task Test_Get_Name()
 		{
-			var response = await client.GetAsync("/api/companies?Mimi");
+			var response = await client.GetAsync("/api/companies?name=Mimi");
 
 			response.EnsureSuccessStatusCode();
 
@@ -39,37 +39,37 @@ namespace UnitTest
 		[Fact]
 		public async Task Test_Get_ID()
 		{
-			var response = await client.GetAsync("/api/companies/5d970cbacba3bf387422ea78");
+			var response = await client.GetAsync("/api/companies/12");
 
 			response.EnsureSuccessStatusCode();
 
 			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 		}
 
-		//[Fact]
-		//public async Task Test_Get_Post()
-		//{
-		//	string stringPayload = "{\"name\":\"MyCompany3\", " +
-		//							"\"vat\":\"321434\" " +
-		//							"}";
-		//	var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
+		[Fact]
+		public async Task Test_Post()
+		{
+			string stringPayload = "{\"name\":\"MyCompany4\", " +
+									"\"vat\":\"321434\" " +
+									"}";
+			var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
 
-		//	var response = await client.PostAsync("/api/companies", httpContent);
-		//	response.EnsureSuccessStatusCode();
+			var response = await client.PostAsync("/api/companies", httpContent);
+			response.EnsureSuccessStatusCode();
 
-		//	Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-		//}
+			Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+		}
 
 		[Fact]
-		public async Task Test_Get_Put()
+		public async Task Test_Put()
 		{
-			string stringPayload = "{\"_id\":\"5d970cbacba3bf387422ea78\", " +
+			string stringPayload = "{\"_id\":\"12\", " +
 									"\"name\":\"Mimirium\", " +
 									"\"vat\":\"321411\" " +
 									"}";
 			var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
 
-			var response = await client.PutAsync("/api/companies/5d970cbacba3bf387422ea78", httpContent);
+			var response = await client.PutAsync("/api/companies/12", httpContent);
 			response.EnsureSuccessStatusCode();
 
 			Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);

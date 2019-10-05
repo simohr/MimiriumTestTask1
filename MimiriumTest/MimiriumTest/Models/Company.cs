@@ -6,10 +6,12 @@ namespace MimiriumTest.Models
 	public class Company
 	{
 		[BsonId]
-		[BsonRepresentation(BsonType.ObjectId)]
+		[BsonRepresentation(BsonType.Int64)]
 		[BsonIgnoreIfDefault]
-		public string Id { get; set; }
+		public long Id { get; set; }
+		[BsonElement("name")]
 		public string Name { get; set; }
+		[BsonElement("vat")]
 		public string Vat { get; set; }
 	}
 }

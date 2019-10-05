@@ -34,8 +34,8 @@ namespace MimiriumTest.Controllers
 			}
 		}
 
-		[HttpGet("{id:length(24)}", Name = "GetCompany")]
-		public ActionResult<Company> Get(string id)
+		[HttpGet("{id}", Name = "GetCompany")]
+		public ActionResult<Company> Get(long id)
 		{
 			var company = _companySerivce.Get(id);
 
@@ -52,11 +52,11 @@ namespace MimiriumTest.Controllers
 		{
 			_companySerivce.Create(company);
 
-			return CreatedAtRoute("GetCompany", new { id = company.Id.ToString() }, company);
+			return CreatedAtRoute("GetCompany", new { id = company.Id }, company);
 		}
 
-		[HttpPut("{id:length(24)}")]
-		public IActionResult Update(string id, Company companyIn)
+		[HttpPut("{id}")]
+		public IActionResult Update(long id, Company companyIn)
 		{
 			var company = _companySerivce.Get(id);
 
@@ -71,7 +71,7 @@ namespace MimiriumTest.Controllers
 		}
 
 		[HttpDelete("{id:length(24)}")]
-		public IActionResult Delete(string id)
+		public IActionResult Delete(long id)
 		{
 			var company = _companySerivce.Get(id);
 
