@@ -18,6 +18,6 @@ services:
       - 8080:80
       - 8083:443
     environment:
-      MongoDB__Host: mongo
+      - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
       - mongo

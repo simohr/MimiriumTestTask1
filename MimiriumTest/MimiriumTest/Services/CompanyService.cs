@@ -1,6 +1,7 @@
 ﻿using MimiriumTest.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,8 +28,26 @@ namespace MimiriumTest.Services
 		public Company Get(long id) =>
 			_companies.Find<Company>(company => company.Id == id).FirstOrDefault();
 
-		public List<Company> GetByName(string name) =>
-			_companies.Find(company => company.Name.ToLower().Contains(name.ToLower())).ToList();
+		public List<Company> GetByName(string name)
+		{
+			if (name.StartsWith('*') && name.EndsWith('*'))
+			{
+				string nameOnly = name.Trim('*');
+				return _companies.Find(company => company.Name.ToLower().Contains(nameOnly.ToLower())).ToList();
+			}
+			else if (name.StartsWith('*'))
+			{
+				return _companies.Find(company => company.Name.ToLower().EndsWith(name.Substring(1).ToLower())).ToList();
+			}
+			else if (name.EndsWith('*'))
+			{
+				return _companies.Find(company => company.Name.ToLower().StartsWith(name.Substring(0, name.Length - 1).ToLower())).ToList();
+			}
+			else
+			{
+				return _companies.Find(company => company.Name.ToLower() == (name.ToLower())).ToList();
+			}
+		}
 
 		public Company Create(Company company)
 		{
@@ -39,7 +58,7 @@ namespace MimiriumTest.Services
 				{
 					var filter = Builders<CompaniesCounter>.Filter.Empty;
 					var update = new BsonDocument("$inc", new BsonDocument { { "counter", 1 } });
-					CompaniesCounter counterObj = _companiesCounter.FindOneAndUpdate<CompaniesCounter>(filter , update);
+					CompaniesCounter counterObj = _companiesCounter.FindOneAndUpdate<CompaniesCounter>(filter, update);
 					company.Id = counterObj.Counter + 1;
 					_companies.InsertOne(company);
 
