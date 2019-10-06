@@ -33,6 +33,11 @@ namespace MobileApp.Adapters
 			return companies[position];
 		}
 
+		public void RemoveCompany(Company company)
+		{
+			companies.Remove(company);
+		}
+
 		public override int Count
 		{
 			get { return companies.Count; } 

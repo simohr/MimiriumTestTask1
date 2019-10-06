@@ -7,4 +7,6 @@
   <string name="edit_form_name">Edit Company</string>
   <string name="save_button">Save</string>
   <string name="cancel_button">Cancel</string>
+  <string name="message_success">Success</string>
+  <string name="message_error">Something went wrong</string>
 </resources>

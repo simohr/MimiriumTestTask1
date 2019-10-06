@@ -25,6 +25,7 @@ namespace MobileApp
     {
 		List<Company> companies = new List<Company>();
 		ListView listView;
+		Android.Support.V7.Widget.SearchView searchView;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -32,46 +33,38 @@ namespace MobileApp
 			Log.Debug("SO", "HELLO");
 			// Set our view from the "main" layout resource
 			SetContentView(Resource.Layout.activity_main);
-			InitializeListView();
 
+			listView = FindViewById<ListView>(Resource.Id.companiesList);
+			InitializeListView();
 
 			FloatingActionButton fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
 			fab.Click += FabOnClick;
+
+			searchView = FindViewById<Android.Support.V7.Widget.SearchView>(Resource.Id.companySearchView);
+			searchView.QueryTextSubmit += (sender, args) => 
+			{
+				if (string.IsNullOrEmpty(args.NewText))
+				{
+					InitializeListView();
+				}
+				else
+				{
+					GetCompaniesByName(args.NewText);
+				}
+				args.Handled = true;
+			};
 		}
 
-		public async void InitializeListView()
+		public async void GetCompaniesByName(string name)
 		{
-			listView = FindViewById<ListView>(Resource.Id.companiesList);
-
-			//companies.Add(new Company()
-			//{
-			//	Id = 0,
-			//	Name = "Mimirium",
-			//	Vat = "12345221"
-			//});
-			//companies.Add(new Company()
-			//{
-			//	Id = 1,
-			//	Name = "MyCompany1",
-			//	Vat = "1111232"
-			//});
-			//companies.Add(new Company()
-			//{
-			//	Id = 2,
-			//	Name = "MyCompany2",
-			//	Vat = "1222221"
-			//});
-
 			HttpClient client = new HttpClient();
-			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-			string url = "http://192.168.100.6:8080/api/companies";
+			string url = "http://192.168.100.4:12109/api/companies?name=" + name;
 			var uri = new Uri(url);
-			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			HttpResponseMessage response;
 
 			response = client.GetAsync(uri).Result;
 			var content = await response.Content.ReadAsStringAsync();
-			Log.Debug("SO", content);
+			companies = JsonConvert.DeserializeObject<List<Company>>(content);
 
 			listView.Adapter = new CompanyAdapter(this, companies);
 			RegisterForContextMenu(listView);
@@ -102,27 +95,66 @@ namespace MobileApp
 			string[] menuItems = { "Edit", "Delete" };
 			var menuItemName = menuItems[menuItemIndex];
 			var adapter = (CompanyAdapter)listView.Adapter;
-			var listItemName = adapter.GetCompanyAtPosition(info.Position);
+			var comapny = adapter.GetCompanyAtPosition(info.Position);
 
-			if(menuItemName == "Edit")
+			if (menuItemName == "Edit")
 			{
 				var intent = new Intent(this, typeof(EditActivity));
-				intent.PutExtra("CompanyItem", JsonConvert.SerializeObject(listItemName));
+				intent.PutExtra("CompanyItem", JsonConvert.SerializeObject(comapny));
 				StartActivity(intent);
 			}
 			else
-			{ 
-				Toast.MakeText(this, string.Format("Selected {0} for item {1}", menuItemName, listItemName), ToastLength.Short).Show();
+			{
+				OnDeleteClick(comapny);
 			}
 			return true;
 		}
 
+		protected override void OnResume()
+		{
+			base.OnResume();
+			InitializeListView();
+		}
+		private async void InitializeListView()
+		{
+			HttpClient client = new HttpClient();
+			//ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+			string url = "http://192.168.100.4:12109/api/companies";
+			var uri = new Uri(url);
+			//client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			HttpResponseMessage response;
+
+			response = client.GetAsync(uri).Result;
+			var content = await response.Content.ReadAsStringAsync();
+			companies = JsonConvert.DeserializeObject<List<Company>>(content);
+			Log.Debug("SO", content);
+
+			listView.Adapter = new CompanyAdapter(this, companies);
+			RegisterForContextMenu(listView);
+		}
+
 		private void FabOnClick(object sender, EventArgs eventArgs)
 		{
-			View view = (View)sender;
 			StartActivity(typeof(AddCompany));
-			//Snackbar.Make(view, "Replace with your own action", Snackbar.LengthLong)
-			//	.SetAction("Action", (Android.Views.View.IOnClickListener)null).Show();
+		}
+
+		private async void OnDeleteClick(Company company)
+		{
+			HttpClient client = new HttpClient();
+			string url = "http://192.168.100.4:12109/api/companies/" + company.Id;
+			var uri = new Uri(url);;
+			HttpResponseMessage response;
+			response = await client.DeleteAsync(uri);
+			if (response.StatusCode == HttpStatusCode.OK)
+			{
+				Toast.MakeText(this, Resource.String.message_success, ToastLength.Short).Show();
+			} 
+			else
+			{
+				Toast.MakeText(this, Resource.String.message_error, ToastLength.Short).Show();
+			}
+			InitializeListView();
+			client.Dispose();
 		}
 	}
 }

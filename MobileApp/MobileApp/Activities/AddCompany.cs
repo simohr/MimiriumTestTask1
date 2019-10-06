@@ -49,21 +49,22 @@ namespace MobileApp.Activities
 
 		public async void OnSaveClick()
 		{
-			Company newComapany = new Company();
-			newComapany.Name = nameText.Text;
-			newComapany.Vat = vatText.Text;
+			Company newComapany = new Company
+			{
+				Name = nameText.Text,
+				Vat = vatText.Text
+			};
 
 			HttpClient client = new HttpClient();
-			string url = "http://192.168.100.6:8080/api/companies";
+			string url = "http://192.168.100.4:12109/api/companies";
 			var uri = new Uri(url);
 			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			HttpResponseMessage response;
 			var json = JsonConvert.SerializeObject(newComapany);
 			var content = new StringContent(json, Encoding.UTF8, "application/json");
-			Log.Debug("SO", json);
 			response = await client.PostAsync(uri, content);
-			Log.Debug("SO", response.StatusCode.ToString());
-			//Finish();
+			client.Dispose();
+			Finish();
 		}
 	}
 }

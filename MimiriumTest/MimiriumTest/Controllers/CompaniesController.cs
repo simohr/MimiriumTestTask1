@@ -67,10 +67,10 @@ namespace MimiriumTest.Controllers
 
 			_companySerivce.Update(id, companyIn);
 
-			return NoContent();
+			return Ok();
 		}
 
-		[HttpDelete("{id:length(24)}")]
+		[HttpDelete("{id}")]
 		public IActionResult Delete(long id)
 		{
 			var company = _companySerivce.Get(id);
@@ -82,7 +82,7 @@ namespace MimiriumTest.Controllers
 
 			_companySerivce.Remove(company.Id);
 
-			return NoContent();
+			return Ok();
 		}
 	}
 }
