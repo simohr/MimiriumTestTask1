@@ -13,8 +13,6 @@ using MobileApp.Activities;
 using Android.Content;
 using Newtonsoft.Json;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using Android.Util;
 using System.Net;
 
@@ -30,7 +28,6 @@ namespace MobileApp
         {
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-			Log.Debug("SO", "HELLO");
 			// Set our view from the "main" layout resource
 			SetContentView(Resource.Layout.activity_main);
 
@@ -58,7 +55,7 @@ namespace MobileApp
 		public async void GetCompaniesByName(string name)
 		{
 			HttpClient client = new HttpClient();
-			string url = "http://192.168.100.4:12109/api/companies?name=" + name;
+			string url = string.Format(Constants.COMPANY_SEARCH_URL, name);
 			var uri = new Uri(url);
 			HttpResponseMessage response;
 
@@ -119,7 +116,7 @@ namespace MobileApp
 		{
 			HttpClient client = new HttpClient();
 			//ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-			string url = "http://192.168.100.4:12109/api/companies";
+			string url = Constants.COMPANY_BASE_URL;
 			var uri = new Uri(url);
 			//client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			HttpResponseMessage response;
@@ -127,7 +124,6 @@ namespace MobileApp
 			response = client.GetAsync(uri).Result;
 			var content = await response.Content.ReadAsStringAsync();
 			companies = JsonConvert.DeserializeObject<List<Company>>(content);
-			Log.Debug("SO", content);
 
 			listView.Adapter = new CompanyAdapter(this, companies);
 			RegisterForContextMenu(listView);
@@ -141,7 +137,7 @@ namespace MobileApp
 		private async void OnDeleteClick(Company company)
 		{
 			HttpClient client = new HttpClient();
-			string url = "http://192.168.100.4:12109/api/companies/" + company.Id;
+			string url = string.Format(Constants.COMPANY_EDIT_URL, company.Id);
 			var uri = new Uri(url);;
 			HttpResponseMessage response;
 			response = await client.DeleteAsync(uri);

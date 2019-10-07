@@ -55,7 +55,7 @@ namespace MobileApp.Activities
 			};
 
 			HttpClient client = new HttpClient();
-			string url = "http://192.168.100.4:12109/api/companies/" + id;
+			string url = string.Format(Constants.COMPANY_EDIT_URL, id);
 			var uri = new Uri(url);
 			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			var json = JsonConvert.SerializeObject(newComapany);

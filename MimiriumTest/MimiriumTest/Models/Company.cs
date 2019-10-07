@@ -6,7 +6,6 @@ namespace MimiriumTest.Models
 	public class Company
 	{
 		[BsonId]
-		[BsonRepresentation(BsonType.Int64)]
 		[BsonIgnoreIfDefault]
 		public long Id { get; set; }
 		[BsonElement("name")]

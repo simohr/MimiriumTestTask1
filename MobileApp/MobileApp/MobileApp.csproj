@@ -63,6 +63,7 @@
     <Compile Include="Activities\EditActivity.cs" />
     <Compile Include="Adapters\CompanyAdapter.cs" />
     <Compile Include="Activities\MainActivity.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Models\Company.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
