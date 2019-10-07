@@ -68,7 +68,7 @@ This is a mobile app developed to consume the MimiriumTest Web API.
     * company_edit - layout for the EditActivity and AddCompany activities.
     * company_list_item - layout for the CompanyAdapter list item.
 
-**Setup**
+**Setup** <br/>
 You need to have Visual Studio with android support(Xamarin Android). You need to modify the Constants script SERVER_HOST 
 variable with the correct IP address and port depending on where you chose to run the MimiriumTest API.
 
