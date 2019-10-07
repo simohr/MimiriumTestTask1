@@ -20,6 +20,18 @@ namespace MimiriumTest.Services
 
 			_companies = database.GetCollection<Company>(settings.CompaniesCollectionName);
 			_companiesCounter = database.GetCollection<CompaniesCounter>(settings.CompaniesCounterCollectionName);
+			//IompaniesCounter counter = _companiesCounter.Find<CompaniesCounter>(Builders<CompaniesCounter>.Filter.Empty);
+			
+			if(_companiesCounter.CountDocuments(Builders<CompaniesCounter>.Filter.Empty) <= 0)
+			{
+				CompaniesCounter counter = new CompaniesCounter
+				{
+					Counter = 0
+				};
+
+				System.Diagnostics.Debug.WriteLine("CREATE COMPANIES COUNTER");
+				_companiesCounter.InsertOne(counter);
+			}
 		}
 
 		public List<Company> Get() =>
