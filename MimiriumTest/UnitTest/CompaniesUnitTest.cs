@@ -89,7 +89,7 @@ namespace UnitTest
 									"\"name\":\"MyCompany5\", " +
 									"\"vat\":\"321411\" " +
 									"}";
-
+			httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
 			response = await client.PutAsync("/api/companies/" + company.Id, httpContent);
 			response.EnsureSuccessStatusCode();
 
