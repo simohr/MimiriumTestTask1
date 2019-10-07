@@ -56,7 +56,7 @@ namespace MobileApp.Activities
 			};
 
 			HttpClient client = new HttpClient();
-			string url = Constants.COMPANY_EDIT_URL ;
+			string url = Constants.COMPANY_BASE_URL ;
 			var uri = new Uri(url);
 			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			HttpResponseMessage response;

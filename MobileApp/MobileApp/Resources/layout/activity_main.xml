@@ -13,7 +13,8 @@
         <android.support.v7.widget.SearchView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/companySearchView" />
+            android:id="@+id/companySearchView"
+            android:background="#ffaacae4" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -21,7 +22,7 @@
         android:paddingTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/companiesList"/>
+        android:id="@+id/companiesList" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
